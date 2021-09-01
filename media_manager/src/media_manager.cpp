@@ -1,16 +1,17 @@
 #include <media_manager/media_manager.h>
 
-
 /////////////////////////    FUNCTION    /////////////////////////
 
-
 // Example https://wiki.videolan.org/LibVLC_Tutorial/
+// sudo apt-get install libvlc-dev  
+
 void initialize()
 {
   gazebo_check = false;
   ros::Time now = ros::Time::now();
 
-  free_resource_flag = true;
+  check_running_need = false;
+  check_pause  =false;
 }
 
 bool parseMediaScript(int media_script_index)
@@ -112,37 +113,55 @@ bool parseMediaScript(int media_script_index)
 /////////////////////////    CALLBACK    /////////////////////////
 void mediaScriptNumberCallback(const std_msgs::Int32::ConstPtr &msg)
 {
-  if ((msg->data == -1) || (msg->data == -2)) //Stop or Break
+  if ((msg->data == -1)) //Stop
   {
     std_msgs::Int32 media_page_num_msg;
     media_page_num_msg.data = msg->data;
 
-    // 영상 stop
-    // gst_element_set_state (pipeline, GST_STATE_NULL);
-
     libvlc_media_player_stop(mp);
     libvlc_media_player_release(mp);
 
-    free_resource_flag = true;
+    check_running_need = false;
+    check_pause =false;
   }
+  if ((msg->data == -2)) //Break
+  {
+    std_msgs::Int32 media_page_num_msg;
+    media_page_num_msg.data = msg->data;
+    if(check_running_need)  
+    {
+
+      libvlc_media_player_pause(mp);
+      // libvlc_media_player_release(mp);
+      check_pause = !check_pause;
+    }
+
+  }
+
+  else if(check_running_need)
+  {
+    return;
+  }
+
   else if (msg->data == 1)
   {
 
     // 영상 선택
-    m = libvlc_media_new_location(inst, "file:///home/ijm20/catkin_ws/src/media_manager_for_HERoEHS/media_manager/data/test_shark.mp4");
+    location = "file:///home/ijm20/catkin_ws/src/media_manager_for_HERoEHS/media_manager/data/test_shark.mp4";
+    m = libvlc_media_new_location(inst, location.c_str());
     mp = libvlc_media_player_new_from_media(m);
     libvlc_media_release(m);
     libvlc_set_fullscreen(mp, true);
     libvlc_media_player_play(mp);
+    check_running_need = true;
+    check_pause =false;
 
   }
   else if (msg->data == 2)
   {
-   
   }
   else if (msg->data == 3)
   {
-   
   }
 }
 
@@ -150,24 +169,15 @@ void mediaStateCallback(const std_msgs::Int32::ConstPtr &msg)
 {
   if ((msg->data == -1) || (msg->data == -2)) //Stop or Break
   {
-    // 영상 stop
-    // gst_element_set_state(pipeline, GST_STATE_NULL);
-    
-    libvlc_media_player_stop(mp);
-    libvlc_media_player_release(mp);
-    free_resource_flag = true;
   }
   else if (msg->data == 1)
   {
-
   }
   else if (msg->data == 2)
   {
-    
   }
   else if (msg->data == 3)
   {
-
   }
 }
 /////////////////////////    MAIN    /////////////////////////
@@ -176,18 +186,18 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "motion_manager_node");
   ros::NodeHandle nh;
+ ros::Rate loop_rate(10);
 
+  // initialize vlc
   inst = libvlc_new(0, NULL);
+
+  location = "";
+  m = libvlc_media_new_location(inst, location.c_str());
+  mp = libvlc_media_player_new_from_media(m);
 
   media_state_sub = nh.subscribe("/heroehs/media_state", 0, &mediaStateCallback);
   media_script_num_sub = nh.subscribe("/heroehs/media_script_num", 0, &mediaScriptNumberCallback);
   media_script_num_pub = nh.advertise<std_msgs::Int32>("/heroehs/media/info", 0);
-
-  /* Initialize GStreamer */
-  // gst_init(&argc, &argv);
-
-  // 영상 선택
-  //pipeline = gst_parse_launch("playbin uri=file:///home/jun/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/test_shark2.mp4", NULL);
 
   //setting media script file path
   std::string temp_media_script_file_path = ros::package::getPath("media_manager") + "/script/media_script.yaml";
@@ -200,32 +210,31 @@ int main(int argc, char **argv)
 
   ROS_INFO("Start Media Script Manager");
 
-  /* Build the pipeline */
-  //pipeline = gst_parse_launch("playbin uri=file:///home/jun/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/test_shark2.mp4", NULL);
-
-  // bus = gst_element_get_bus(pipeline);
-  // msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, (GstMessageType)(GST_MESSAGE_ERROR | GST_MESSAGE_EOS));
-  
   while (ros::ok())
   {
-    if (free_resource_flag)
+    int playing = libvlc_media_player_is_playing(mp);
+    ROS_INFO("%d", playing);
+
+    if (check_running_need && !check_pause)
     {
+      if (!libvlc_media_player_is_playing(mp))
+      {
 
-      libvlc_media_player_stop(mp);
-      libvlc_media_player_release(mp);
+        libvlc_media_player_stop(mp);
+        libvlc_media_player_release(mp);
 
-      /* Free resources */
-      // if (msg != NULL)
-      //   gst_message_unref(msg);
-      // gst_object_unref(bus);
-      // gst_element_set_state(pipeline, GST_STATE_NULL);
-      // gst_object_unref(pipeline);
-
-      free_resource_flag = false;
+        check_running_need = false;
+        check_pause = false;
+      }
     }
 
     ros::spinOnce();
+    loop_rate.sleep();
+
   }
+
+  libvlc_media_player_stop(mp);
+  libvlc_media_player_release(mp);
 
   libvlc_release(inst);
 }

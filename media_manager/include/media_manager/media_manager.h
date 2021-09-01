@@ -57,9 +57,12 @@ std::string convertIntToString(int num)
 libvlc_instance_t * inst;
 libvlc_media_player_t *mp;
 libvlc_media_t *m;
+std::string location;
+
 
 //resource free flag
-bool free_resource_flag;
+bool check_running_need;
+bool check_pause;
 
 //function
 void initialize();
