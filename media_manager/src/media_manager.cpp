@@ -118,10 +118,10 @@ void mediaScriptNumberCallback(const std_msgs::Int32::ConstPtr& msg)
         gst_element_set_state (pipeline, GST_STATE_NULL);
         free_resource_flag = true;
     }
-    else if(msg->data == 1)
+else if(msg->data == 1)
     {
         // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/test_shark2.mp4", NULL);
+        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/JTBC_demo_video/interview01.mp4", NULL);
        
         ROS_INFO("Video Load Finish");
 
@@ -149,102 +149,7 @@ void mediaScriptNumberCallback(const std_msgs::Int32::ConstPtr& msg)
     else if(msg->data == 2)
     {
         // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/tayo_wash_hand.mp4", NULL);
-       
-        ROS_INFO("Video Load Finish");
-
-        if (gst_element_get_state(pipeline, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Failed to PLAY during preroll.");
-        }
-        else {
-            ROS_DEBUG("Stream is PLAYING in preroll.");
-        }
-
-        gst_element_set_state (pipeline, GST_STATE_PLAYING);
-        
-        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Could not start stream!");
-        }
-        ROS_INFO("play Video");
-
-        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Could not start stream!");    
-        }
-    }
-
-    else if (msg->data == 4)
-    {
-        // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/script.mp4", NULL);
-
-        ROS_INFO("Video Load Finish");
-
-        if (gst_element_get_state(pipeline, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Failed to PLAY during preroll.");
-        }
-        else {
-            ROS_DEBUG("Stream is PLAYING in preroll.");
-        }
-
-        gst_element_set_state(pipeline, GST_STATE_PLAYING);
-
-        if (gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Could not start stream!");
-        }
-        ROS_INFO("play Video");
-
-        if (gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Could not start stream!");
-        }
-    }
-}
-
-void mediaStateCallback(const std_msgs::Int32::ConstPtr& msg)
-{
-    if  ((msg->data == -1) || (msg->data == -2)) //Stop or Break
-    {
-        // 영상 stop
-        gst_element_set_state (pipeline, GST_STATE_NULL);
-        free_resource_flag = true;
-    }
-    else if(msg->data == 1)
-    {
-        // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/baby_shark_video.mp4", NULL);
-       
-        ROS_INFO("Video Load Finish");
-
-        if (gst_element_get_state(pipeline, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Failed to PLAY during preroll.");
-        }
-        else {
-            ROS_DEBUG("Stream is PLAYING in preroll.");
-        }
-
-        gst_element_set_state (pipeline, GST_STATE_PLAYING);
-        
-        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Could not start stream!");
-        }
-        ROS_INFO("play Video");
-
-        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
-        {
-            ROS_ERROR("Could not start stream!");    
-        }
-    }
-    else if(msg->data == 2)
-    {
-        // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/tayo_wash_hand.mp4", NULL);
+        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/JTBC_demo_video/interview02.mp4", NULL);
        
         ROS_INFO("Video Load Finish");
 
@@ -272,7 +177,45 @@ void mediaStateCallback(const std_msgs::Int32::ConstPtr& msg)
     else if(msg->data == 3)
     {
         // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/baby_shark_hand_wash.mp4", NULL);
+        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/JTBC_demo_video/interview03.mp4", NULL);
+
+        ROS_INFO("Video Load Finish");
+
+        if (gst_element_get_state(pipeline, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE)
+        {
+            ROS_ERROR("Failed to PLAY during preroll.");
+        }
+        else {
+            ROS_DEBUG("Stream is PLAYING in preroll.");
+        }
+
+        gst_element_set_state (pipeline, GST_STATE_PLAYING);
+        
+        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
+        {
+            ROS_ERROR("Could not start stream!");
+        }
+        ROS_INFO("play Video");
+
+        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
+        {
+            ROS_ERROR("Could not start stream!");    
+        }
+    }
+}
+
+void mediaStateCallback(const std_msgs::Int32::ConstPtr& msg)
+{
+    if  ((msg->data == -1) || (msg->data == -2)) //Stop or Break
+    {
+        // 영상 stop
+        gst_element_set_state (pipeline, GST_STATE_NULL);
+        free_resource_flag = true;
+    }
+    else if(msg->data == 1)
+    {
+        // 영상 선택
+        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/JTBC_demo_video/interview01.mp4", NULL);
        
         ROS_INFO("Video Load Finish");
 
@@ -297,11 +240,38 @@ void mediaStateCallback(const std_msgs::Int32::ConstPtr& msg)
             ROS_ERROR("Could not start stream!");    
         }
     }
-
-    else if (msg->data == 4)
+    else if(msg->data == 2)
     {
         // 영상 선택
-        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/script.mp4", NULL);
+        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/JTBC_demo_video/interview02.mp4", NULL);
+       
+        ROS_INFO("Video Load Finish");
+
+        if (gst_element_get_state(pipeline, NULL, NULL, -1) == GST_STATE_CHANGE_FAILURE)
+        {
+            ROS_ERROR("Failed to PLAY during preroll.");
+        }
+        else {
+            ROS_DEBUG("Stream is PLAYING in preroll.");
+        }
+
+        gst_element_set_state (pipeline, GST_STATE_PLAYING);
+        
+        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
+        {
+            ROS_ERROR("Could not start stream!");
+        }
+        ROS_INFO("play Video");
+
+        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
+        {
+            ROS_ERROR("Could not start stream!");    
+        }
+    }
+    else if(msg->data == 3)
+    {
+        // 영상 선택
+        pipeline = gst_parse_launch("playbin uri=file:///home/xavier/catkin_ws/src/JTBC_demo_video/interview03.mp4", NULL);
 
         ROS_INFO("Video Load Finish");
 
@@ -313,17 +283,17 @@ void mediaStateCallback(const std_msgs::Int32::ConstPtr& msg)
             ROS_DEBUG("Stream is PLAYING in preroll.");
         }
 
-        gst_element_set_state(pipeline, GST_STATE_PLAYING);
-
-        if (gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
+        gst_element_set_state (pipeline, GST_STATE_PLAYING);
+        
+        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
         {
             ROS_ERROR("Could not start stream!");
         }
         ROS_INFO("play Video");
 
-        if (gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
+        if(gst_element_set_state(pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
         {
-            ROS_ERROR("Could not start stream!");
+            ROS_ERROR("Could not start stream!");    
         }
     }
 }
@@ -346,7 +316,7 @@ int main(int argc, char **argv)
        
 
     //setting media script file path
-    std::string temp_media_script_file_path = ros::package::getPath("able_media_manager") + "/script/able_media_script.yaml";
+    std::string temp_media_script_file_path = ros::package::getPath("media_manager") + "/script/media_script.yaml";
     if  (nh.getParam("media_script_file_path", media_script_file_path) == false)
     {
         media_script_file_path = temp_media_script_file_path;
@@ -354,7 +324,7 @@ int main(int argc, char **argv)
         ROS_WARN("The default media script file path will be used.");
     }
 
-    ROS_INFO("Start ABLE Media Script Manager");
+    ROS_INFO("Start Media Script Manager");
 
     /* Build the pipeline */
     //pipeline = gst_parse_launch("playbin uri=file:///home/jun/catkin_ws/src/HERoEHS/ABLE/HERoEHS-ABLE-Operation/able_media_manager/data/test_shark2.mp4", NULL);
