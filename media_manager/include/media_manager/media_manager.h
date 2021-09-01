@@ -13,6 +13,10 @@
 #include <std_msgs/Int32.h>
 #include <std_msgs/Bool.h>
 
+
+#include <vlc/vlc.h>
+
+
 #define MP4_PLAY_CMD_NAME                   "mp4"
 #define WAIT_ACTION_PLAY_FINISH_CMD_NAME    "wait"
 #define SLEEP_CMD_NAME                      "sleep"
@@ -47,9 +51,12 @@ std::string convertIntToString(int num)
 }
 
 //GStreamer
-GstElement* pipeline;
-GstBus* bus;
-GstMessage* msg;
+// GstElement* pipeline;
+// GstBus* bus;
+// GstMessage* msg;
+libvlc_instance_t * inst;
+libvlc_media_player_t *mp;
+libvlc_media_t *m;
 
 //resource free flag
 bool free_resource_flag;

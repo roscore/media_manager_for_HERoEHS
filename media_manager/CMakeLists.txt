@@ -54,4 +54,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS} ${GSTREAMER_INCLUDE_DIRS})
 
  add_executable(media_manager_node src/media_manager.cpp)
- target_link_libraries(media_manager_node ${catkin_LIBRARIES} ${GSTREAMER_LIBRARIES} ${YAML_CPP_LIBRARIES})
+ target_link_libraries(media_manager_node ${catkin_LIBRARIES} ${GSTREAMER_LIBRARIES} ${YAML_CPP_LIBRARIES} -lvlc)
